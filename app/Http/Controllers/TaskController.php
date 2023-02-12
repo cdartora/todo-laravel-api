@@ -23,7 +23,7 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) // uses the Request class as an argument
+    public function store(Request $request) // uses the Request class as an argument
 
     {
         $task = Task::create([
@@ -35,17 +35,6 @@ class TaskController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -53,7 +42,8 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        //
+        $task = Task::find($id);
+        return response()->json($task, 200);
     }
 
     /**
