@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TodoController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +19,6 @@ Route::get('/', function () {
     return response()->json(['message' => 'hello, world. im a simple todo rest api that can manage your tasks.']);
 });
 
-Route::get('/tasks', [TodoController::class, 'index']);
+Route::get('/tasks', [TaskController::class, 'index']);
+
+Route::post('/tasks', [TaskController::class, 'create']);

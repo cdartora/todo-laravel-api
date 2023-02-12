@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Task;
+use App\Models\Task; // import Task model for db querys
 
-class TodoController extends Controller
+class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,9 +23,15 @@ class TodoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request) // uses the Request class as an argument
+
     {
-        //
+        $task = Task::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+        ]);
+
+        return response()->json(['task' => $task], 201);
     }
 
     /**
