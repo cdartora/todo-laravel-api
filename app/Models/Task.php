@@ -4,12 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Task extends Model
 {
+    use HasFactory;
+
     protected $guarded = [
         'created_at',
         'updated_at',
+    ];
+
+    protected $hidden = [
+        'password',
     ];
 
     protected $fillable = [
@@ -17,5 +24,8 @@ class Task extends Model
         'description',
     ];
 
-    use HasFactory;
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
