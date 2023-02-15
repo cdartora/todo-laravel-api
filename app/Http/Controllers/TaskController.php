@@ -51,7 +51,7 @@ class TaskController extends Controller
         $task->user_id = $request->input('user')->id;
         $task->save();
 
-        return response()->json(['message' => 'Todo created successfully.'], 201);
+        return response()->json(['message' => 'Task created successfully.'], 201);
     }
 
     /**
@@ -108,7 +108,7 @@ class TaskController extends Controller
         // in case description came empty
         $task->update(array_filter($data));
 
-        return response()->json(['message' => 'Todo was updated successfully.'], 200);
+        return response()->json(['message' => 'Task was updated successfully.'], 200);
     }
 
     /**
@@ -129,6 +129,6 @@ class TaskController extends Controller
 
         $task->delete();
 
-        return response()->json(['message' => 'Todo was deleted successfully.']);
+        return response()->json(['message' => 'Task was deleted successfully.']);
     }
 }
