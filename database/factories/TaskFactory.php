@@ -17,10 +17,12 @@ class TaskFactory extends Factory
      */
     public function definition()
     {
+        $user = User::inRandomOrder()->first();
+
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'user_id' => User::factory(),
+            'user_id' => $user->id,
             'completed' => false,
         ];
     }

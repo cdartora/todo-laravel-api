@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use App\Traits\Uuid;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, AuthenticableTrait, Notifiable;
+    use HasFactory, AuthenticableTrait, Notifiable, Uuid;
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -44,6 +45,8 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
     ];
+
+    protected $table = 'users';
 
     public function tasks()
     {
