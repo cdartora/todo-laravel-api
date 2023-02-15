@@ -17,8 +17,18 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $id = $request->input('user')->id;
-        $tasks = Task::where('user_id', $id)->get();
-        return response()->json(['tasks' => $tasks]);
+        // $tasks = Task::where('user_id', $id)->get()
+        // return response()->json(['tasks' => $tasks]);
+        $tasks = Task::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(5);
+        return response()->json([
+            'tasks' => $tasks->items(),
+            'links' => [
+                'first' => $tasks->url(1),
+                'last' => $tasks->url($tasks->lastPage()),
+                'prev' => $tasks->previousPageUrl(),
+                'next' => $tasks->nextPageUrl(),
+            ],
+        ]);
     }
 
     /**
