@@ -10,18 +10,19 @@ use League\Config\Exception\ValidationException; // import Task model for db que
 class TaskController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of tasks linked to the user.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::all();
+        $id = $request->input('user')->id;
+        $tasks = Task::where('user_id', $id)->get();
         return response()->json(['tasks' => $tasks]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create a new task
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -29,6 +30,7 @@ class TaskController extends Controller
 
     {
         $data = $request->all();
+
 
         // this is the default validation method in laravel
         $validator = Validator::make(
@@ -43,10 +45,11 @@ class TaskController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        Task::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-        ]);
+        $task = new Task;
+        $task->title = $request->input('title');
+        $task->description = $request->input('description');
+        $task->user_id = $request->input('user')->id;
+        $task->save();
 
         return response()->json(['message' => 'Todo created successfully.'], 201);
     }
@@ -57,9 +60,15 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $task = Task::findOrFail($id);
+        $userId = $request->input('user')->id;
+
+        if ($task->user_id != $userId) {
+            return response()->json(['message' => 'Not authorized.'], 401);
+        }
+
         return response()->json($task, 200);
     }
 
@@ -74,6 +83,11 @@ class TaskController extends Controller
     {
         // search for the task, if dont find it will throw exception
         $task = Task::findOrFail($id);
+        $userId = $request->input('user')->id;
+
+        if ($task->user_id != $userId) {
+            return response()->json(['message' => 'Not authorized.'], 401);
+        }
 
         $data = $request->all();
 
@@ -103,10 +117,18 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $task = Task::findOrFail($id);
+        $userId = $request->input('user')->id;
+
+        if ($task->user_id != $userId) {
+            return response()->json(['message' => 'Not authorized.'], 401);
+        }
+
+
         $task->delete();
+
         return response()->json(['message' => 'Todo was deleted successfully.']);
     }
 }
